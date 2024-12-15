@@ -1,0 +1,241 @@
+import { useState, useContext } from "react";
+import { storeContext } from "../context/storeContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../layout/Spinner";
+
+function Register() {
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
+  const { isLoading ,setIsLoading } = useContext(storeContext);
+
+  async function registerUser() {
+    try {
+      const response = await fetch(`${API_URL}/users/register`, {
+        method: "POST", //PUT
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+          fullName: fullName.trim(),
+          country: country.trim(),
+        }),
+      });
+
+      //store response info in data
+      const data = await response.json();
+
+      if (response.status === 201) {
+        //send notification
+        toast.success(data.msg);
+        //clear screen
+        setEmail("");
+        setPassword("");
+
+        //move the user to login screen
+        navigate("/login");
+        //set loading to false
+        setIsLoading(false);
+      } else if (response.status === 400) {
+        toast.error("Password needs to min of 6, uppercase, lowercase, number");
+        setIsLoading(false);
+      } else if (response.status === 401) {
+        toast.error("User already exists");
+        setIsLoading(false);
+      } else{
+        setIsLoading(false);
+        toast.error(data.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function toggle() {
+    if (showPassword) {
+      setShowPassword(false);
+    } else {
+      setShowPassword(true);
+    }
+  }
+
+  function onChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+  function onChangeFullName(e) {
+    setFullName(e.target.value);
+  }
+  function onChangeCountry(e) {
+    setCountry(e.target.value);
+  }
+
+  function onChangePassword(e) {
+    setPassword(e.target.value);
+  }
+  function signUpHandler(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    //checks on form
+
+    registerUser();
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return (
+    <>
+      <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-lg">
+          <h1 className="text-center text-2xl font-bold text-primary sm:text-3xl">
+            Register on our School portal today
+          </h1>
+
+          <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
+            Register and get access to our school portal. Watch free software development classes
+          </p>
+
+          <form
+            onSubmit={signUpHandler}
+            className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+          >
+            <p className="text-center text-lg font-medium">
+              Create an account with us today
+            </p>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label
+                htmlFor="fullname"
+                className="block text-sm font-medium text-white"
+              >
+                {" "}
+                FullName
+              </label>
+
+              <input
+                type="text"
+                id="fullname"
+                value={fullName}
+                onChange={onChangeFullName}
+                required
+                name="fullname"
+                className="mt-1 w-full rounded-md border-gray-200  text-sm shadow-sm p-3"
+              />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label
+                htmlFor="Country"
+                className="block text-sm font-medium text-white"
+              >
+                {" "}
+                Country{" "}
+              </label>
+
+              <select
+                id="Country"
+                required
+                onChange={onChangeCountry}
+                className="h-10 rounded border-gray-300 text-sm w-32 border"
+              >
+                <option>Select Country</option>
+                <option value="NG">Nigeria</option>
+                <option value="GH">Ghana</option>
+                <option value="FR">France</option>
+                <option value="CAD">Canada</option>
+                <option value="IE">Ireland</option>
+                <option value="US">United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AE">United Arab Emirates</option>
+                <option value="SE">Sweden</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
+
+              <div className="relative">
+                <input
+                  type="email"
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={onChangeEmail}
+                  required
+                />
+
+                <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 text-gold-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={onChangePassword}
+                  required
+                />
+
+                <span
+                  className="absolute inset-y-0 end-0 grid place-content-center px-4"
+                  onClick={toggle}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="block w-full rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white"
+            >
+              Sign Up
+            </button>
+
+            <p className="text-center text-sm text-gray-500">
+              Have an account?{" "}
+              <Link className="underline" to="/login">
+                Login
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+export default Register;

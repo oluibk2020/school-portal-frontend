@@ -1,0 +1,148 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState, useRef } from "react";
+import { storeContext } from "../context/storeContext";
+import Spinner from "../layout/Spinner";
+import ReactPlayer from "react-player";
+import Courses from "./Courses";
+import { FaRegCirclePlay } from "react-icons/fa6";
+import { set } from "lodash";
+import { video } from "motion/react-client";
+import _ from "lodash";
+
+function EnrolledCourse() {
+  const { course, isLoading, getOneEnrolledCourse, setIsLoading } =
+    useContext(storeContext);
+  const [selectedLesson, setSelectedLesson] = useState({videoUrl: null});
+  const [sortedLessons, setSortedLessons] = useState([]);
+  const navigate = useNavigate();
+  const params = useParams();
+  const pageId = params.id;
+
+  //check if course is empty
+  const isEmpty = Object.keys(course).length === 0;
+
+
+
+
+  useEffect(() => {
+    //set app to loading to get book data
+
+    setIsLoading(true);
+    //function to get book
+    async function fetchCourse() {
+      const data = await getOneEnrolledCourse(pageId);  
+      
+    }
+    
+    //call function to get course
+    fetchCourse();
+    const sortedLessons = _.orderBy(course.lessons, ["id"], ["asc"]);
+    setSortedLessons(sortedLessons);
+    setIsLoading(false);
+
+  }, [isEmpty]);
+
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return (
+    <div>
+      {isEmpty ? (
+        <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-700">
+          <div className="p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 max-w-md mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-4">
+              We are getting the course for you from the server
+            </h2>
+            <p className="text-xl text-center">Please be patient</p>
+          </div>
+        </div>
+      ) : (
+        <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+          <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div className="relative">
+              <ReactPlayer
+                url={
+                  selectedLesson.videoUrl === null
+                    ? course.lessons[0].videoUrl
+                    : selectedLesson.videoUrl
+                }
+                playing={true}
+                controls={true}
+                width="100%"
+                height="400px"
+                className="rounded-t-lg"
+              />
+            </div>
+            <div className="p-6 sm:p-8">
+              <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white">
+                {course.title}
+              </h1>
+              <p className="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">
+                {course.description.length > 250 ? (
+                  <>
+                    {course.description.slice(0, 250)}
+                    <span className="text-gray-600 dark:text-gray-300">
+                      ...{" "}
+                    </span>
+                  </>
+                ) : (
+                  course.description
+                )}
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate(`/enrolledcourses`)}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Back to Enrolled Courses
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+            <h2 className="text-2xl font-bold text-center py-4 text-gray-900 dark:text-white">
+              Lessons
+            </h2>
+
+            <ul className="space-y-4 px-4 sm:px-6 lg:px-8 py-4">
+              {Object.keys(sortedLessons).length === 0
+                ? "No lessons found"
+                : sortedLessons.map((lesson) => (
+                    <li
+                      key={lesson.id}
+                      className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600"
+                      onClick={() => {
+                        setSelectedLesson(lesson);
+                      }}
+                    >
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                          {lesson.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          {lesson.description.length > 70 ? (
+                            <>
+                              {lesson.description.slice(0, 70)}
+                              <span>... </span>
+                            </>
+                          ) : (
+                            course.description
+                          )}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0 ml-4">
+                        <FaRegCirclePlay className="text-xl text-gray-600 dark:text-gray-300" />
+                      </div>
+                    </li>
+                  ))}
+            </ul>
+          </div>
+        </div>
+      )}
+      <Courses />
+    </div>
+  );
+}
+export default EnrolledCourse;
