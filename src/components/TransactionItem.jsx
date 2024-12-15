@@ -19,7 +19,8 @@ function TransactionItem() {
     transaction,
     paymentLink,
     fetchOneTransaction,
-    createPaymentInvoice
+    createPaymentInvoice,
+    setIsOpen
   } = useContext(storeContext);
 
   //check if transaction is empty
@@ -40,6 +41,9 @@ function TransactionItem() {
 
     //fetch account activities automatically
       fetchOneTransaction(params.id);
+
+      //
+      setIsOpen(false)
       
 
     setIsLoading(false);
@@ -54,11 +58,13 @@ function TransactionItem() {
 
   function payNow() {
     try {
+      setIsLoading(true);
       if (isEmpty === false) {
         if (transaction.status === "processing") {
           createPaymentInvoice(transaction.id); //generate payment link
         }
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +72,7 @@ function TransactionItem() {
 
   //redirect if payment link is not empty
   if (paymentLink.trim() !== "") {
+    
     return <PaymentRedirect link={paymentLink} />;
   }
 

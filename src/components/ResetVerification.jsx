@@ -14,8 +14,13 @@ function ResetVerification() {
     isAuth,
     userEmail,
     setUserEmail,
+    setIsOpen
   } = useContext(storeContext);
   const navigate = useNavigate();
+
+   useEffect(() => {
+     setIsOpen(false);
+   }, []);
 
   //backend url
   const API_URL = import.meta.env.VITE_API_URL;

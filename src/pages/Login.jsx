@@ -1,6 +1,6 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { storeContext } from "../context/storeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,14 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
-  const { setIsAuth, isLoading, setIsLoading, userEmail, setUserEmail } =
+  const { setIsAuth, isLoading, setIsLoading, userEmail, setUserEmail, setIsOpen } =
     useContext(storeContext);
 
   const navigate = useNavigate();
+
+   useEffect(() => {
+      setIsOpen(false);
+    }, []);
 
   async function loginUser() {
     try {

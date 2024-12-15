@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+
+import { storeContext } from "../context/storeContext";
 
 function Hero() {
+
+  const { setIsOpen } = useContext(storeContext);
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
-    <section className="bg-blue-500 pt-16 pb-10  h-screen flex items-center justify-center">
+    <section className="py-16 bg-blue-500 flex flex-col justify-center">
       <div className="container mx-auto px-4">
         <h1 className="text-6xl text-white font-bold pt-5">
           Learn Software Engineering for Free
@@ -20,14 +29,14 @@ function Hero() {
           </Link>
           <Link
             to="/register"
-            className="bg-secondary py-2 px-4 text-white rounded-lg shadow-lg"
+            className="bg-yellow-500 text-gray-900 py-2 px-4  rounded-lg shadow-lg"
           >
             Enroll Now
           </Link>
         </div>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-xl font-semibold mb-2 bg-blue-500 text-white p-2 rounded">
+            <h3 className="text-xl font-semibold mb-2 bg-yellow-500 text-gray-700 p-2 rounded">
               Affordable Fees
             </h3>
             <p className="text-gray-700">
@@ -35,7 +44,7 @@ function Hero() {
             </p>
           </div>
           <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-xl font-semibold mb-2 bg-secondary text-white p-2 rounded">
+            <h3 className="text-xl font-semibold mb-2 bg-yellow-500 text-gray-700 p-2 rounded">
               Free Learning
             </h3>
             <p className="text-gray-700">
@@ -43,7 +52,7 @@ function Hero() {
             </p>
           </div>
           <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-xl font-semibold mb-2 bg-blue-500 text-white p-2 rounded">
+            <h3 className="text-xl font-semibold mb-2 bg-yellow-500 text-gray-700 p-2 rounded">
               Mobile Friendly
             </h3>
             <p className="text-gray-700">

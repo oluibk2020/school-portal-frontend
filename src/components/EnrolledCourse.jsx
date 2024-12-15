@@ -10,9 +10,9 @@ import { video } from "motion/react-client";
 import _ from "lodash";
 
 function EnrolledCourse() {
-  const { course, isLoading, getOneEnrolledCourse, setIsLoading } =
+  const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
-  const [selectedLesson, setSelectedLesson] = useState({videoUrl: null});
+  const [selectedLesson, setSelectedLesson] = useState({ videoUrl: null });
   const [sortedLessons, setSortedLessons] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
@@ -21,27 +21,23 @@ function EnrolledCourse() {
   //check if course is empty
   const isEmpty = Object.keys(course).length === 0;
 
-
-
-
   useEffect(() => {
+    setIsOpen(false);
+
     //set app to loading to get book data
 
     setIsLoading(true);
     //function to get book
     async function fetchCourse() {
-      const data = await getOneEnrolledCourse(pageId);  
-      
+      const data = await getOneEnrolledCourse(pageId);
     }
-    
+
     //call function to get course
     fetchCourse();
     const sortedLessons = _.orderBy(course.lessons, ["id"], ["asc"]);
     setSortedLessons(sortedLessons);
     setIsLoading(false);
-
   }, [isEmpty]);
-
 
   if (isLoading) {
     return <Spinner />;

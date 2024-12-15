@@ -5,7 +5,7 @@ import Spinner from "../layout/Spinner";
 import { toast } from "react-toastify";
 
 function Course() {
-  const { course, isLoading, getOneCourse, setIsLoading } =
+  const { course, isLoading, getOneCourse, setIsLoading , setIsOpen} =
     useContext(storeContext);
   const navigate = useNavigate();
   const params = useParams();
@@ -21,6 +21,8 @@ function Course() {
   useEffect(() => {
     //set app to loading to get book data
     setIsLoading(true);
+
+    setIsOpen(false)
 
     //function to get book
     async function fetchCourse() {

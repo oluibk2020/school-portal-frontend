@@ -9,7 +9,7 @@ import { div } from "motion/react-client";
 import { truncate } from "lodash";
 
 function Services() {
-  const { isLoading, setIsLoading, services, wallet, walletBalance } =
+  const { isLoading, setIsLoading, services, wallet, walletBalance, setIsOpen } =
     useContext(storeContext);
 
     const [selectedService, setSelectedService] = useState(null);
@@ -20,6 +20,10 @@ function Services() {
   //get token from localstorage
   const token = localStorage.getItem("token");
   const API_URL = import.meta.env.VITE_API_URL;
+
+   useEffect(() => {
+     setIsOpen(false);
+   }, []);
 
    async function payService(serviceId) {
      try {

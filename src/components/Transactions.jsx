@@ -12,6 +12,7 @@ function Transactions({ currency }) {
     setIsLoading,
     fetchTransactions,
     transactions,
+    setIsOpen
   } = useContext(storeContext);
 
   //lodash to sort
@@ -20,6 +21,7 @@ function Transactions({ currency }) {
   useEffect(() => {
     setIsLoading(true);
 
+    setIsOpen(false)
     //fetch account activities automatically
       fetchTransactions(currency);
 

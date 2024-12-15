@@ -11,6 +11,7 @@ function ResetPassword() {
     setIsLoading,
     isAuth,
     setUserEmail,
+    setIsOpen
   } = useContext(storeContext);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ function ResetPassword() {
   //if auth is true, navigate to user dashboard
   useEffect(() => {
     if (isAuth) {
+      setIsOpen(false)
       navigate("/dashboard");
     }
   }, []);

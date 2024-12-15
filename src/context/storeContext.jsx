@@ -18,6 +18,7 @@ export const StoreProvider = ({ children }) => {
   const [services, setServices] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [course, setCourse] = useState({});
+    const [isOpen, setIsOpen] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   //get token from localstorage
@@ -292,7 +293,9 @@ export const StoreProvider = ({ children }) => {
     paymentLink,
     setPaymentLink,
     createPaymentInvoice,
-    services
+    services,
+    isOpen,
+    setIsOpen
   };
 
   return (

@@ -1,25 +1,32 @@
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { storeContext } from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import { toast } from "react-toastify";
 
 function Dashboard() {
-  const { userProfile, isLoading,  setIsLoading } =
+  const { userProfile, isLoading, setIsLoading, setIsOpen } =
     useContext(storeContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+   setIsOpen(false) 
+  },[])
 
    if (isLoading) {
      return <Spinner />;
    }
 
   return (
-    <section className="py-16 bg-gradient-to-r from-indigo-500 to-purple-500 flex flex-col justify-center">
+    <section className="py-16 bg-blue-500 flex flex-col justify-center">
       <div className="container mx-auto p-4">
-        <h1 className="text-6xl font-bold text-white text-center">Welcome to Your Dashboard</h1>
+        <h1 className="text-6xl font-bold text-white text-center">
+          Welcome to Your Dashboard
+        </h1>
         <p className="text-2xl text-white my-4 text-center">
-          Hello, {userProfile.fullName}! Explore your enrolled courses and manage your account.
+          Hello, {userProfile.fullName}! Explore your enrolled courses and
+          manage your account.
         </p>
         <div className="flex flex-wrap justify-center">
           <Link

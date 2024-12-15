@@ -11,6 +11,7 @@ function LoginVerification() {
     setIsAuth,
     isAuth,
     userEmail,
+    setIsOpen
   } = useContext(storeContext);
 
   //website url
@@ -70,6 +71,7 @@ function LoginVerification() {
   }
 
   useEffect(() => {
+    setIsOpen(false)
     if (userEmail === "") {
       navigate("/login");
     }

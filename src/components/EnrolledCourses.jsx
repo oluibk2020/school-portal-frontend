@@ -6,12 +6,14 @@ import Courses from "./Courses";
 
 function EnrolledCourses() {
   const navigate = useNavigate();
-  const { enrolledCourses, getAllEnrolledCourses, isLoading, setIsLoading } =
+  const { enrolledCourses, getAllEnrolledCourses, isLoading, setIsLoading, setIsOpen } =
     useContext(storeContext);
 
   useEffect(() => {
     //set app to loading to get book data
     setIsLoading(true);
+
+    setIsOpen(false)
 
     //function to get book
     async function fetchCourse() {

@@ -7,10 +7,15 @@ import {storeContext} from "../context/storeContext";
 import PaymentRedirect from "./PaymentRedirect";
 
 function PaymentInvoice() {
-  const { isLoading, setIsLoading, paymentLink, createPaymentInvoice } =
+  const { isLoading, setIsLoading, paymentLink, createPaymentInvoice, setIsOpen } =
     useContext(storeContext);
 
   const navigate = useNavigate();
+
+   useEffect(() => {
+     setIsOpen(false);
+   }, []);
+   
   //website url
   //get token from localstorage
   const token = localStorage.getItem("token");

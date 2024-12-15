@@ -1,7 +1,15 @@
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useState, useContext , useEffect} from "react";
+import { storeContext } from "../context/storeContext";
 
 function NotFound() {
+
+  const {  setIsOpen } = useContext(storeContext);
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
     <div className="grid h-screen place-content-center bg-white px-4 py-8 pt-16">
       <div className="text-center">

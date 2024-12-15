@@ -3,9 +3,9 @@ import { useState, useContext } from "react";
 import { storeContext } from "../context/storeContext";
 
 function Navbar() {
-  const { isAuth } = useContext(storeContext);
+  const { isAuth, isOpen, setIsOpen } = useContext(storeContext);
 
-  const [isOpen, setIsOpen] = useState(false);
+ 
   const navLinkClass = "block py-2 pr-4 pl-3 text-gray-700 rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:focus:bg-gray-700 dark:hover:bg-gray-600 md:dark:hover:bg-transparent"
 
   //getting variables from env in vite

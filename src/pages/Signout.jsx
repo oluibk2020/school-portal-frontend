@@ -1,11 +1,15 @@
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { storeContext } from "../context/storeContext";
 
 function Signout() {
   const navigate = useNavigate();
-  const { setIsAuth } = useContext(storeContext);
+  const { setIsAuth, setIsOpen } = useContext(storeContext);
+
+   useEffect(() => {
+     setIsOpen(false) 
+    },[])
 
   function signOutHandler() {
     localStorage.removeItem("token");

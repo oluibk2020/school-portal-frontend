@@ -17,10 +17,13 @@ function Wallet() {
     setWallet,
     userProfile,
     fetchProfile,
+    setIsOpen
   } = useContext(storeContext);
 
   //navigate
   const navigate = useNavigate();
+
+
 
   function selectWallet(e) {
     setWallet(e.target.value);
@@ -41,6 +44,8 @@ function Wallet() {
     setIsLoading(true);
 
     runAtStartup();
+
+    setIsOpen(false)
 
     setIsLoading(false);
   }, [wallet, country]);

@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 function Courses() {
   const navigate = useNavigate();
-   const { courses,isLoading } =
+   const { courses,isLoading, setIsOpen } =
      useContext(storeContext);
+
+      useEffect(() => {
+        setIsOpen(false);
+      }, []);
 
   if (isLoading) {
     return <Spinner />;

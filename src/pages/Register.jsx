@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { storeContext } from "../context/storeContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -14,7 +14,11 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
-  const { isLoading ,setIsLoading } = useContext(storeContext);
+  const { isLoading ,setIsLoading, setIsOpen } = useContext(storeContext);
+
+  useEffect(() => {
+       setIsOpen(false) 
+      },[])
 
   async function registerUser() {
     try {

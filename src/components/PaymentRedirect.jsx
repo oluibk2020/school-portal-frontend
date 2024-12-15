@@ -3,7 +3,11 @@ import { storeContext } from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
 
 function PaymentRedirect({ link }) {
-  const { setPaymentLink } = useContext(storeContext);
+  const { setPaymentLink, setIsOpen } = useContext(storeContext);
+
+   useEffect(() => {
+     setIsOpen(false);
+   }, []);
 
   const navigate = useNavigate();
 
