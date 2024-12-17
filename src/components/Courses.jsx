@@ -11,7 +11,7 @@ function Courses() {
         setIsOpen(false);
       }, []);
 
-  if (isLoading) {
+  if (isLoading || courses.length === 0) {
     return <Spinner />;
   }  
 

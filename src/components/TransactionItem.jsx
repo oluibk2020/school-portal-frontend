@@ -20,7 +20,8 @@ function TransactionItem() {
     paymentLink,
     fetchOneTransaction,
     createPaymentInvoice,
-    setIsOpen
+    setIsOpen,
+    setPaymentLink
   } = useContext(storeContext);
 
   //check if transaction is empty
@@ -70,16 +71,40 @@ function TransactionItem() {
     }
   }
 
-  //redirect if payment link is not empty
+  function openPaymentPopup(paymentUrl) {
+    setIsLoading(true);
+    toast.success("Loading payment page...!");
+
+    // Open the payment URL in a popup window
+    const popup = window.open(
+      paymentUrl,
+      "_blank",
+      "width=380,height=500,scrollbars=yes,resizable=yes"
+    );
+
+    // Periodically check if the popup is closed
+    const checkPopupClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkPopupClosed);
+        setIsLoading(false);
+        setPaymentLink("");
+        navigate("/wallet");
+        // Handle return to the app here
+        toast.success("Payment process completed! Returning to the app.");
+      }
+    }, 1000);
+  }
+
+
+  //open pop up if payment link is not empty
   if (paymentLink.trim() !== "") {
-    
-    return <PaymentRedirect link={paymentLink} />;
+    openPaymentPopup(paymentLink);
   }
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       {isEmpty ? (
-        "No traansaction data"
+        "No transaction data"
       ) : (
         <div className="my-10 mx-16">
           <h1 className="text-center text-2xl font-bold text-primary sm:text-3xl">

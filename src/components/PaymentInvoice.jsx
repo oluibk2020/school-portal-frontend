@@ -3,19 +3,25 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../layout/Spinner";
 import { useContext } from "react";
-import {storeContext} from "../context/storeContext";
+import { storeContext } from "../context/storeContext";
 import PaymentRedirect from "./PaymentRedirect";
 
 function PaymentInvoice() {
-  const { isLoading, setIsLoading, paymentLink, createPaymentInvoice, setIsOpen } =
-    useContext(storeContext);
+  const {
+    isLoading,
+    setIsLoading,
+    paymentLink,
+    setPaymentLink,
+    createPaymentInvoice,
+    setIsOpen,
+  } = useContext(storeContext);
 
   const navigate = useNavigate();
 
-   useEffect(() => {
-     setIsOpen(false);
-   }, []);
-   
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+
   //website url
   //get token from localstorage
   const token = localStorage.getItem("token");
@@ -28,6 +34,31 @@ function PaymentInvoice() {
 
   //extracting form data
   const { amount } = formData;
+
+function openPaymentPopup(paymentUrl) {
+  setIsLoading(true);
+  toast.success("Loading payment page...!");
+
+  // Open the payment URL in a popup window
+  const popup = window.open(
+    paymentUrl,
+    "_blank",
+    "width=380,height=500,scrollbars=yes,resizable=yes"
+  );
+
+  // Periodically check if the popup is closed
+  const checkPopupClosed = setInterval(() => {
+    if (popup.closed) {
+      clearInterval(checkPopupClosed);
+      setIsLoading(false);
+      setPaymentLink("");
+      navigate("/wallet");
+      // Handle return to the app here
+      toast.success("Payment process completed! Returning to the app.");
+    }
+  }, 1000);
+}
+
 
   //changing state of form data
   function onChange(e) {
@@ -107,7 +138,8 @@ function PaymentInvoice() {
   }
 
   if (paymentLink.trim() !== "") {
-    return <PaymentRedirect link={paymentLink} />;
+    openPaymentPopup(paymentLink);
+    // return <PaymentRedirect link={paymentLink} />;
   }
 
   return (
