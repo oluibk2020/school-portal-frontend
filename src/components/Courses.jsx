@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { storeContext } from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../layout/Spinner";
 
 function Courses() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ function Courses() {
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold mb-8">Courses</h1>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {courses.map((course) => (
           <div

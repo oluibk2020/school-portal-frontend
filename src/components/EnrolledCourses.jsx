@@ -25,7 +25,7 @@ function EnrolledCourses() {
     fetchCourse();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || enrolledCourses.length === 0) {
     return <Spinner />;
   }
 

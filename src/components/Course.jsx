@@ -81,7 +81,7 @@ function Course() {
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-700">
           <div className="p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 max-w-md mx-auto">
             <h2 className="text-2xl font-bold text-center mb-4">
-              No course found
+              We are fetching the course for you from the server
             </h2>
             <p className="text-xl text-center">Please try again later</p>
           </div>
