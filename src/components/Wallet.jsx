@@ -23,8 +23,6 @@ function Wallet() {
   //navigate
   const navigate = useNavigate();
 
-
-
   function selectWallet(e) {
     setWallet(e.target.value);
   }
@@ -50,7 +48,7 @@ function Wallet() {
     setIsLoading(false);
   }, [wallet, country]);
 
-  if (isLoading) {
+  if (isLoading || isProfileEmpty) {
     return <Spinner />;
   }
 

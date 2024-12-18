@@ -10,13 +10,16 @@ function Dashboard() {
     useContext(storeContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-   setIsOpen(false) 
-  },[])
+  //check if transaction is empty
+  const isProfileEmpty = Object.keys(userProfile).length === 0;
 
-   if (isLoading) {
-     return <Spinner />;
-   }
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+
+  if (isLoading || isProfileEmpty) {
+    return <Spinner />;
+  }
 
   return (
     <section className="py-16 bg-blue-500 flex flex-col justify-center">

@@ -58,6 +58,7 @@ function Register() {
       } else{
         setIsLoading(false);
         toast.error(data.msg);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);

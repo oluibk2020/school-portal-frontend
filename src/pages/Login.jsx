@@ -55,6 +55,7 @@ function Login() {
         toast.error("Login failed. Please try again");
         setEmail("");
         setPassword("");
+         setIsLoading(false);
         return
       }
     } catch (error) {
