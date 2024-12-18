@@ -9,7 +9,7 @@ export const StoreProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [wallet, setWallet] = useState("ngn");
-    const [paymentLink, setPaymentLink] = useState("");
+  const [paymentLink, setPaymentLink] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [transaction, setTransaction] = useState({});
   const [userProfile, setUserProfile] = useState({});
@@ -18,7 +18,7 @@ export const StoreProvider = ({ children }) => {
   const [services, setServices] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [course, setCourse] = useState({});
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   //get token from localstorage
@@ -103,7 +103,7 @@ export const StoreProvider = ({ children }) => {
       console.log(error);
     }
   }
- 
+
   async function getAllEnrolledCourses() {
     try {
       const response = await fetch(`${API_URL}/courses/enrolled`, {
@@ -165,10 +165,13 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
-
-
   async function fetchBalance(currency) {
     try {
+      if (currency !== "ngn") {
+         toast.error("Only NGN currency is supported at the moment");
+         return;
+      }
+
       const response = await fetch(`${API_URL}/wallet/${currency}`, {
         method: "GET",
         headers: {
@@ -248,16 +251,18 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
-
   async function createPaymentInvoice(transactionId) {
     try {
-      const response = await fetch(`${API_URL}/wallet/pay/transaction/${transactionId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${API_URL}/wallet/pay/transaction/${transactionId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await response.json();
       setPaymentLink(data.response.data.link);
@@ -295,7 +300,7 @@ export const StoreProvider = ({ children }) => {
     createPaymentInvoice,
     services,
     isOpen,
-    setIsOpen
+    setIsOpen,
   };
 
   return (

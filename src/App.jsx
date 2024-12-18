@@ -22,6 +22,8 @@ import ResetVerification from "./components/ResetVerification";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Footer from "./layout/Footer";
+import Profile from "./pages/Profile";
+import UpdateProfile from "./components/UpdateProfile";
 
 function App() {
   const { isAuth } = useContext(storeContext);
@@ -54,6 +56,8 @@ function App() {
           element={isAuth ? <Dashboard /> : <Register />}
         />
         <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Login />} />
+        <Route path="/updateprofile" element={isAuth ? <UpdateProfile /> : <Login />} />
+        <Route path="/profile" element={isAuth ? <Profile /> : <Login />} />
         <Route path="/courses" element={isAuth ? <Courses /> : <Login />} />
         <Route
           path="/walletdeposit"

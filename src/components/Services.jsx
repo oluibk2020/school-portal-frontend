@@ -9,7 +9,7 @@ import { div } from "motion/react-client";
 import { truncate } from "lodash";
 
 function Services() {
-  const { isLoading, setIsLoading, services, wallet, walletBalance, setIsOpen } =
+  const { isLoading, setIsLoading, services, wallet, walletBalance, setIsOpen, fetchBalance } =
     useContext(storeContext);
 
     const [selectedService, setSelectedService] = useState(null);
@@ -23,6 +23,9 @@ function Services() {
 
    useEffect(() => {
      setIsOpen(false);
+
+     //fetch balance
+     fetchBalance(wallet);
    }, []);
 
    async function payService(serviceId) {
@@ -52,6 +55,12 @@ function Services() {
   //submit
   async function onSubmitHandler(e) {
     e.preventDefault();
+
+    //check amount validation
+    if (walletBalance < selectedService.amount) {
+      return toast.error(`You cannot pay more than ${walletBalance}, which is your current wallet balance`);
+      
+    }
 
     setIsLoading(true);
     //create Invoice

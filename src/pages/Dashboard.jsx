@@ -10,7 +10,7 @@ function Dashboard() {
     useContext(storeContext);
   const navigate = useNavigate();
 
-  //check if transaction is empty
+  //check if profile is empty
   const isProfileEmpty = Object.keys(userProfile).length === 0;
 
   useEffect(() => {
@@ -47,6 +47,13 @@ function Dashboard() {
             <p className="text-gray-600">View or manage your account.</p>
           </Link>
           <Link
+            to="/profile"
+            className="bg-white p-4 rounded-lg shadow-lg m-4 w-64"
+          >
+            <h2 className="text-2xl font-bold">Profile</h2>
+            <p className="text-gray-600">View or manage your profile.</p>
+          </Link>
+          <Link
             to="/enrolledcourses"
             className="bg-white p-4 rounded-lg shadow-lg m-4 w-64"
           >
@@ -54,7 +61,7 @@ function Dashboard() {
             <p className="text-gray-600">Access your enrolled courses.</p>
           </Link>
           <Link
-            to="/enrolledcourses"
+            to="/services"
             className="bg-white p-4 rounded-lg shadow-lg m-4 w-64"
           >
             <h2 className="text-2xl font-bold">Services</h2>
