@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -13,12 +14,46 @@ function Register() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const navigate = useNavigate();
-  const { isLoading ,setIsLoading, setIsOpen } = useContext(storeContext);
+  const { isLoading, setIsLoading, setIsOpen, setIsAuth } = useContext(storeContext);
 
   useEffect(() => {
-       setIsOpen(false) 
-      },[])
+    setIsOpen(false);
+  }, []);
+
+    const handleGoogleLoginSuccess = async (response) => {
+      try {
+        // Send the token to your backend for verification
+        const res = await fetch(`${API_URL}/auth/google`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: response.credential }),
+        });
+
+        if (!res.ok) {
+          toast.error("Failed to authenticate with the server");
+        }
+
+        const data = await res.json();
+
+        // Handle the response (e.g., save JWT token in local storage)
+        //  console.log("Server Response:", data);
+        localStorage.setItem("token", data.access_token); // Save JWT for future API calls
+        setIsAuth(true);
+        toast.success("login successful");
+        navigate("/dashboard");
+      } catch (error) {
+        console.error("Error during Google login:", error.message);
+      }
+    };
+
+    // Handle Google Login error
+    const handleGoogleLoginError = () => {
+      toast.error("Google Login Failed");
+    };
 
   async function registerUser() {
     try {
@@ -55,7 +90,7 @@ function Register() {
       } else if (response.status === 401) {
         toast.error("User already exists");
         setIsLoading(false);
-      } else{
+      } else {
         setIsLoading(false);
         toast.error(data.msg);
         setIsLoading(false);
@@ -107,15 +142,27 @@ function Register() {
           </h1>
 
           <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
-            Register and get access to our school portal. Watch free software development classes
+            Register and get access to our school portal. Watch free software
+            development classes
           </p>
+
+          
+          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <div className="pt-5  md:ml-20 lg:ml-32 xl:ml-40 2xl:ml-52">
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+                className="w-full sm:w-auto md:w-64 lg:w-80 xl:w-96 2xl:w-112 px-4 rounded-lg bg-white shadow-lg hover:shadow-xl transition duration-150 ease-in-out"
+              />
+            </div>
+          </GoogleOAuthProvider>
 
           <form
             onSubmit={signUpHandler}
             className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
             <p className="text-center text-lg font-medium">
-              Create an account with us today
+              Or sign up with credentials
             </p>
 
             <div className="col-span-6 sm:col-span-3">

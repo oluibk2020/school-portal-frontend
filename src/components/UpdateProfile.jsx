@@ -18,6 +18,7 @@ function UpdateProfile() {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [country, setCountry] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
   //get token from localstorage
   const token = localStorage.getItem("token");
@@ -33,6 +34,7 @@ function UpdateProfile() {
         body: JSON.stringify({
           mobile: mobile.trim(),
           fullName: fullName.trim(),
+          country: country.trim(),
         }),
       });
 
@@ -70,6 +72,10 @@ function UpdateProfile() {
       toast.error("Mobile number must be valid 11 digits");
       return;
     }
+    if (country.trim().length === 0) {
+      toast.error("Country must be selected");
+      return;
+    }
 
     setIsLoading(true);
     updateProfile();
@@ -80,6 +86,9 @@ function UpdateProfile() {
   }
   function onChangeMobile(e) {
     setMobile(e.target.value);
+  }
+  function onChangeCountry(e) {
+    setCountry(e.target.value);
   }
 
   if (isLoading || isProfileEmpty) {
@@ -132,6 +141,33 @@ function UpdateProfile() {
               required
               className="mt-1 w-full rounded-md border-gray-200  text-sm shadow-sm p-3 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
             />
+          </div>
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="Country"
+              className="block text-sm font-medium text-white"
+            >
+              {" "}
+              Country{" "}
+            </label>
+
+            <select
+              id="Country"
+              required
+              onChange={onChangeCountry}
+              className="h-10 rounded border-gray-300 text-sm w-32 border"
+            >
+              <option>Select Country</option>
+              <option value="NG">Nigeria</option>
+              <option value="GH">Ghana</option>
+              <option value="FR">France</option>
+              <option value="CAD">Canada</option>
+              <option value="IE">Ireland</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AE">United Arab Emirates</option>
+              <option value="SE">Sweden</option>
+            </select>
           </div>
           <button
             type="submit"

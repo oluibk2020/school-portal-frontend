@@ -5,27 +5,68 @@ import { storeContext } from "../context/storeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
-  const { setIsAuth, isLoading, setIsLoading, userEmail, setUserEmail, setIsOpen } =
-    useContext(storeContext);
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const {
+    setIsAuth,
+    isLoading,
+    setIsLoading,
+    userEmail,
+    setUserEmail,
+    setIsOpen,
+  } = useContext(storeContext);
 
   const navigate = useNavigate();
 
-   useEffect(() => {
-      setIsOpen(false);
-    }, []);
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+
+  const handleGoogleLoginSuccess = async (response) => {
+    try {
+      // Send the token to your backend for verification
+      const res = await fetch(`${API_URL}/auth/google`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: response.credential }),
+      });
+
+      if (!res.ok) {
+        toast.error("Failed to authenticate with the server");
+      }
+
+      const data = await res.json();
+
+      // Handle the response (e.g., save JWT token in local storage)
+      //  console.log("Server Response:", data);
+      localStorage.setItem("token", data.access_token); // Save JWT for future API calls
+      setIsAuth(true);
+      toast.success("login successful");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error during Google login:", error.message);
+    }
+  };
+
+  // Handle Google Login error
+  const handleGoogleLoginError = () => {
+    toast.error("Google Login Failed");
+  };
 
   async function loginUser() {
     try {
       //set user email globally
-       setUserEmail(email);
+      setUserEmail(email);
 
-       //call api
+      //call api
       const response = await fetch(`${API_URL}/auth/login-request`, {
         method: "POST", //PUT
         headers: {
@@ -41,22 +82,20 @@ function Login() {
       const data = await response.json();
 
       if (response.status === 200) {
-       
-
         //clear screen
         setEmail("");
         setPassword("");
 
         //move the user to login verification screen
-         navigate("/loginverification");
+        navigate("/loginverification");
         //set isloading to false
         setIsLoading(false);
       } else {
         toast.error("Login failed. Please try again");
         setEmail("");
         setPassword("");
-         setIsLoading(false);
-        return
+        setIsLoading(false);
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -112,6 +151,18 @@ function Login() {
             </p>
 
             <div>
+              <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                <div className=" mx-0 my-auto">
+                  <GoogleLogin
+                    onSuccess={handleGoogleLoginSuccess}
+                    onError={handleGoogleLoginError}
+                  />
+                </div>
+              </GoogleOAuthProvider>
+
+              <div className="py-6 text-center">
+                <p>Or continue with email and password</p>
+              </div>
               <label htmlFor="email" className="sr-only">
                 Email
               </label>
