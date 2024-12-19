@@ -42,7 +42,8 @@ function Login() {
       });
 
       if (!res.ok) {
-        toast.error("Failed to authenticate with the server");
+        navigate("/register");
+      return  toast.error("Failed to authenticate with the server");
       }
 
       const data = await res.json();

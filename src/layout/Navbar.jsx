@@ -112,6 +112,15 @@ function Navbar() {
                     Sign Out
                   </NavLink>
                 </li>
+                <li>
+                  <a
+                    href="https://charisintelligence.com.ng"
+                    className={navLinkClass}
+                    target="_blank"
+                  >
+                    Back to Main Site
+                  </a>
+                </li>
               </>
             ) : (
               <>
@@ -132,6 +141,15 @@ function Navbar() {
                   >
                     Login
                   </NavLink>
+                </li>
+                <li>
+                  <a
+                    href="https://charisintelligence.com.ng"
+                    className={navLinkClass}
+                    target="_blank"
+                  >
+                    Back to Main Site
+                  </a>
                 </li>
               </>
             )}
