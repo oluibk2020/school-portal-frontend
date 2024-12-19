@@ -30,6 +30,8 @@ function Login() {
 
   const handleGoogleLoginSuccess = async (response) => {
     try {
+      
+        setIsLoading(true);
       // Send the token to your backend for verification
       const res = await fetch(`${API_URL}/auth/google`, {
         method: "POST",
@@ -58,6 +60,7 @@ function Login() {
 
   // Handle Google Login error
   const handleGoogleLoginError = () => {
+    setIsLoading(false);
     toast.error("Google Login Failed");
   };
 
