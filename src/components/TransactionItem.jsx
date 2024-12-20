@@ -1,4 +1,4 @@
-import { Link, useNavigate , useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { storeContext } from "../context/storeContext";
 import { toast } from "react-toastify";
@@ -11,8 +11,6 @@ function TransactionItem() {
   //params
   const params = useParams();
 
-  
-
   const {
     isLoading,
     setIsLoading,
@@ -21,41 +19,37 @@ function TransactionItem() {
     fetchOneTransaction,
     createPaymentInvoice,
     setIsOpen,
-    setPaymentLink
+    setPaymentLink,
   } = useContext(storeContext);
 
   //check if transaction is empty
-   const isEmpty = Object.keys(transaction).length === 0;
+  const isEmpty = Object.keys(transaction).length === 0;
 
-   //check if date exceeded one hour
-   const targetDate = new Date(transaction.createdAt);
-   const currentDate = new Date();
-   const oneHourInMilliseconds = 1000 * 60 * 60; // Milliseconds in 1 hour
+  //check if date exceeded one hour
+  const targetDate = new Date(transaction.createdAt);
+  const currentDate = new Date();
+  const oneHourInMilliseconds = 1000 * 60 * 60; // Milliseconds in 1 hour
 
-   // Calculate the difference in milliseconds between current and target date
-   const timeDifference = currentDate.getTime() - targetDate.getTime();
-
-
+  // Calculate the difference in milliseconds between current and target date
+  const timeDifference = currentDate.getTime() - targetDate.getTime();
 
   useEffect(() => {
-    setIsLoading(true);
-
     //fetch account activities automatically
-      fetchOneTransaction(params.id);
+    async function runAtStartUp() {
+      setIsLoading(true);
 
-      //
-      setIsOpen(false)
-      
+      await fetchOneTransaction(params.id);
+      setIsLoading(false);
+    }
 
-    setIsLoading(false);
+    runAtStartUp();
+    //
+    setIsOpen(false);
   }, []);
 
-  if (isLoading) {
+  if (isLoading || isEmpty) {
     return <Spinner />;
   }
-
-
-  
 
   function payNow() {
     try {
@@ -94,7 +88,6 @@ function TransactionItem() {
       }
     }, 1000);
   }
-
 
   //open pop up if payment link is not empty
   if (paymentLink.trim() !== "") {
@@ -185,7 +178,13 @@ function TransactionItem() {
               </div>
               <div className="grid grid-cols-1 gap-1 p-3 bg-black sm:grid-cols-3 sm:gap-4">
                 <dt className="font-medium ">Transaction Status</dt>
-                <dd className={transaction.status === "failed" ? "text-red-500" : `text-white sm:col-span-2`}>
+                <dd
+                  className={
+                    transaction.status === "failed"
+                      ? "text-red-500"
+                      : `text-white sm:col-span-2`
+                  }
+                >
                   {transaction.status}
                 </dd>
               </div>

@@ -17,7 +17,7 @@ function Wallet() {
     setWallet,
     userProfile,
     fetchProfile,
-    setIsOpen
+    setIsOpen,
   } = useContext(storeContext);
 
   //navigate
@@ -33,22 +33,23 @@ function Wallet() {
   const country = userProfile.country;
 
   //run this code when page loads
-  function runAtStartup() {
-    fetchProfile();
-    fetchBalance(wallet);
-  }
+  
 
   useEffect(() => {
-    setIsLoading(true);
+
+    async function runAtStartup() {
+      setIsLoading(true);
+      await fetchProfile();
+      await fetchBalance(wallet);
+      setIsLoading(false);
+    }
 
     runAtStartup();
-
-    setIsOpen(false)
 
     setIsLoading(false);
   }, [wallet, country]);
 
-  if (isLoading || isProfileEmpty) {
+  if (isLoading || isProfileEmpty || walletBalance === "") {
     return <Spinner />;
   }
 
