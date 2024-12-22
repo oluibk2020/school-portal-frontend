@@ -1,0 +1,11 @@
+https://portal.charisintelligence.com.ng/
+https://portal.charisintelligence.com.ng/login
+https://portal.charisintelligence.com.ng/register
+https://portal.charisintelligence.com.ng/dashboard
+https://portal.charisintelligence.com.ng/profile
+https://portal.charisintelligence.com.ng/courses
+https://portal.charisintelligence.com.ng/enrolledcourses
+https://portal.charisintelligence.com.ng/wallet
+https://portal.charisintelligence.com.ng/signout
+https://portal.charisintelligence.com.ng/services
+https://portal.charisintelligence.com.ng/resetpassword

@@ -21,6 +21,7 @@ export const StoreProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
+
   //get token from localstorage
   const token = localStorage.getItem("token");
 

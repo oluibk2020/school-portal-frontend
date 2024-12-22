@@ -6,6 +6,7 @@ import { storeContext } from "../context/storeContext";
 import { MdCallReceived } from "react-icons/md";
 import { LuSendHorizontal } from "react-icons/lu";
 import Transactions from "./Transactions";
+import { Helmet } from "react-helmet-async";
 
 function Wallet() {
   const {
@@ -19,6 +20,8 @@ function Wallet() {
     fetchProfile,
     setIsOpen,
   } = useContext(storeContext);
+  
+      const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
   //navigate
   const navigate = useNavigate();
@@ -55,6 +58,24 @@ function Wallet() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Your Wallet | CharisIntelligence - Manage Payments Seamlessly
+        </title>
+        <meta
+          name="description"
+          content="Securely manage your wallet for payments, fees, and transactions. Access all your CharisIntelligence financial activities in one convenient place."
+        />
+        <meta
+          name="keywords"
+          content="CharisIntelligence wallet, manage payments, tech course fees, secure transactions, payment solutions, educational platform wallet"
+        />
+        <meta name="author" content="CharisIntelligence" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href={`${FRONTEND_URL}/wallet`} />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+      </Helmet>
       <div className="px-5 xl:px-12 py-6  items-center   lg:ml-10">
         <div className="col-span-6 sm:col-span-3 my-4">
           <label

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { Helmet } from "react-helmet-async";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,8 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
   const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
   const {
     setIsAuth,
     isLoading,
@@ -30,8 +33,7 @@ function Login() {
 
   const handleGoogleLoginSuccess = async (response) => {
     try {
-      
-        setIsLoading(true);
+      setIsLoading(true);
       // Send the token to your backend for verification
       const res = await fetch(`${API_URL}/auth/google`, {
         method: "POST",
@@ -43,7 +45,7 @@ function Login() {
 
       if (!res.ok) {
         navigate("/register");
-      return  toast.error("Failed to authenticate with the server");
+        return toast.error("Failed to authenticate with the server");
       }
 
       const data = await res.json();
@@ -135,6 +137,25 @@ function Login() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Login to Your Account | CharisIntelligence - Learn Software
+          Engineering for Free
+        </title>
+        <meta
+          name="description"
+          content="Access your CharisIntelligence account to continue learning software engineering, coding, and tech courses for free. Start building your future today!"
+        />
+        <meta
+          name="keywords"
+          content="login to CharisIntelligence, software engineering account, free coding platform login, access tech courses, tech education login, online learning portal"
+        />
+        <meta name="author" content="CharisIntelligence" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href={`${FRONTEND_URL}/login`} />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+      </Helmet>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-primary sm:text-3xl">

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Spinner from "../layout/Spinner";
 import { storeContext } from "../context/storeContext";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 function ResetPassword() {
   const {
@@ -13,6 +14,8 @@ function ResetPassword() {
     setUserEmail,
     setIsOpen
   } = useContext(storeContext);
+  
+      const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
@@ -73,6 +76,24 @@ function ResetPassword() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Reset Your Password | CharisIntelligence - Secure Your Account
+        </title>
+        <meta
+          name="description"
+          content="Forgot your password? Easily reset it and regain access to your free software engineering and tech courses on CharisIntelligence."
+        />
+        <meta
+          name="keywords"
+          content="reset password, forgot password, secure account, CharisIntelligence password recovery, account access, tech education security"
+        />
+        <meta name="author" content="CharisIntelligence" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href={`${FRONTEND_URL}/resetpassword`} />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+      </Helmet>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-primary sm:text-3xl">

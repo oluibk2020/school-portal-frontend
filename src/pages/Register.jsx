@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { Helmet } from "react-helmet-async";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,8 @@ function Register() {
   const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const navigate = useNavigate();
   const { isLoading, setIsLoading, setIsOpen, setIsAuth } = useContext(storeContext);
+  
+  const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
   useEffect(() => {
     setIsOpen(false);
@@ -137,6 +140,25 @@ function Register() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Join CharisIntelligence | Register for Free Software Engineering
+          Courses
+        </title>
+        <meta
+          name="description"
+          content="Sign up for CharisIntelligence and start learning software engineering, coding, and tech skills for free. Build your career with expert-led online courses today!"
+        />
+        <meta
+          name="keywords"
+          content="register for coding courses, join CharisIntelligence, free tech skills, sign up for software engineering, coding education, online tech platform registration"
+        />
+        <meta name="author" content="CharisIntelligence" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href={`${FRONTEND_URL}/register`} />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+      </Helmet>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-primary sm:text-3xl">
@@ -148,7 +170,6 @@ function Register() {
             development classes
           </p>
 
-          
           <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
             <div className="pt-5  md:ml-20 lg:ml-32 xl:ml-40 2xl:ml-52">
               <GoogleLogin

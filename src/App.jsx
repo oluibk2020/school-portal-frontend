@@ -71,7 +71,7 @@ function App() {
         />
         <Route path="/course/:id" element={isAuth ? <Course /> : <Login />} />
         <Route
-          path="//transaction/:id"
+          path="/transaction/:id"
           element={isAuth ? <TransactionItem /> : <Login />}
         />
         <Route
