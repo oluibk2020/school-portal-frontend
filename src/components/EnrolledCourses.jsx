@@ -3,6 +3,7 @@ import { storeContext } from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import Courses from "./Courses";
+import { Helmet } from "react-helmet-async";
 
 function EnrolledCourses() {
   const navigate = useNavigate();

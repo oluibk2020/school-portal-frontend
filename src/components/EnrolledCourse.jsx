@@ -8,6 +8,7 @@ import { FaRegCirclePlay } from "react-icons/fa6";
 import { set } from "lodash";
 import { video } from "motion/react-client";
 import _ from "lodash";
+import { Helmet } from "react-helmet-async";
 
 function EnrolledCourse() {
   const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
