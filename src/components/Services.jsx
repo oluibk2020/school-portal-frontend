@@ -8,51 +8,65 @@ import PaymentRedirect from "./PaymentRedirect";
 import { div } from "motion/react-client";
 import { truncate } from "lodash";
 import { Helmet } from "react-helmet-async";
+import _ from "lodash";
 
 function Services() {
-  const { isLoading, setIsLoading, services, wallet, walletBalance, setIsOpen, fetchBalance } =
-    useContext(storeContext);
-  
-    const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
-    const [selectedService, setSelectedService] = useState(null);
-    const [hideServices, setHideServices] = useState(false);
-   
+  const {
+    isLoading,
+    setIsLoading,
+    services,
+    wallet,
+    walletBalance,
+    setIsOpen,
+    fetchBalance,
+  } = useContext(storeContext);
+
+  const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
+  const [selectedService, setSelectedService] = useState(null);
+  const [hideServices, setHideServices] = useState(false);
+  const [sortedServices, setSortedServices] = useState([]);
+
   const navigate = useNavigate();
   //website url
   //get token from localstorage
   const token = localStorage.getItem("token");
   const API_URL = import.meta.env.VITE_API_URL;
 
-   useEffect(() => {
-     setIsOpen(false);
+  //check if service is empty
+  const isEmpty = Object.keys(services).length === 0;
 
-     //fetch balance
-     fetchBalance(wallet);
-   }, []);
+  useEffect(() => {
+    setIsOpen(false);
 
-   async function payService(serviceId) {
-     try {
-       const response = await fetch(`${API_URL}/services/pay/${serviceId}`, {
-         method: "GET", //PUT
-         headers: {
-           "Content-Type": "application/json",
-           Authorization: `Bearer ${token}`, //your token
-         },
-       });
+    //fetch balance
+    fetchBalance(wallet);
+    //lodash to sort
+    const sortedServices = _.orderBy(services, ["id"], ["asc"]);
+    setSortedServices(sortedServices);
+  }, [isEmpty]);
 
-       const data = await response.json();
+  async function payService(serviceId) {
+    try {
+      const response = await fetch(`${API_URL}/services/pay/${serviceId}`, {
+        method: "GET", //PUT
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, //your token
+        },
+      });
 
-       if (response.status === 200) {
+      const data = await response.json();
+
+      if (response.status === 200) {
         toast.success(data.msg);
-         navigate("/wallet");
-       } else {
-         toast.error(data.msg);
-       }
-     } catch (error) {
-       console.log(error);
-     }
-   }
-
+        navigate("/wallet");
+      } else {
+        toast.error(data.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   //submit
   async function onSubmitHandler(e) {
@@ -60,20 +74,20 @@ function Services() {
 
     //check amount validation
     if (walletBalance < selectedService.amount) {
-      return toast.error(`You cannot pay more than ${walletBalance}, which is your current wallet balance`);
-      
+      return toast.error(
+        `You cannot pay more than ${walletBalance}, which is your current wallet balance`
+      );
     }
 
     setIsLoading(true);
     //create Invoice
-    await payService(selectedService.id)
+    await payService(selectedService.id);
     setIsLoading(false);
   }
 
-  if (isLoading) {
+  if (isLoading || isEmpty) {
     return <Spinner />;
   }
-
 
   return (
     <>
@@ -105,7 +119,7 @@ function Services() {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-8">
             {!hideServices
-              ? services.map((service) => (
+              ? sortedServices.map((service) => (
                   <div
                     key={service.id}
                     className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition duration-300 ease-in-out"
@@ -170,6 +184,5 @@ function Services() {
       </div>
     </>
   );
-
 }
 export default Services;
