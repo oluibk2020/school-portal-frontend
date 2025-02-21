@@ -60,27 +60,24 @@ function EnrolledCourse() {
           <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <div className="relative">
               <ReactPlayer
-                // url={
-                //   selectedLesson.videoUrl === null
-                //     ? course.lessons[0].videoUrl
-                //     : selectedLesson.videoUrl
-                // }
                 url={
-                  "https://charisintelligence.com.ng/portal/videos/html/lesson3.mp4"
+                  selectedLesson.videoUrl === null
+                    ? course.lessons[0].videoUrl
+                    : selectedLesson.videoUrl
                 }
                 playing={true}
                 controls={true}
-                // config={{
-                //   youtube: {
-                //     playerVars: {
-                //       modestbranding: 1, // Removes YouTube logo
-                //       rel: 0, // Prevents showing related videos
-                //       showinfo: 0, // Hides video title and uploader info
-                //       controls: 1, // Hides player controls
-                //       disablekb: 1, // Disables keyboard controls
-                //     },
-                //   },
-                // }}
+                config={{
+                  youtube: {
+                    playerVars: {
+                      modestbranding: 1, // Removes YouTube logo
+                      rel: 0, // Prevents showing related videos
+                      showinfo: 0, // Hides video title and uploader info
+                      controls: 1, // Hides player controls
+                      disablekb: 1, // Disables keyboard controls
+                    },
+                  },
+                }}
                 width="100%"
                 height="400px"
                 className="rounded-t-lg"
