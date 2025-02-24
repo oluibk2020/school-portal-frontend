@@ -6,18 +6,20 @@ import ReactPlayer from "react-player";
 import Courses from "./Courses";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import _ from "lodash";
+import Plyr from "plyr-react";
+import "plyr-react/plyr.css";
 
 function EnrolledCourse() {
   const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
-  const [selectedLesson, setSelectedLesson] = useState({ videoUrl: undefined });
+  const [selectedLessonUrl, setSelectedLessonUrl] = useState("");
   const [sortedLessons, setSortedLessons] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
   const pageId = params.id;
 
-  //check if course is empty
-  const isEmpty = Object.keys(course).length === 0;
+  //check if sorted course is empty
+  const isEmpty = Object.keys(sortedLessons).length === 0;
 
   useEffect(() => {
     setIsOpen(false);
@@ -28,17 +30,37 @@ function EnrolledCourse() {
     //function to get book
     async function fetchCourse() {
       const data = await getOneEnrolledCourse(pageId);
-          const sortedLessons = _.orderBy(data.lessons, ["id"], ["asc"]);
-          setSortedLessons(sortedLessons);
+      const sortedLessons = _.orderBy(data.lessons, ["id"], ["asc"]);
+
+      //set selected lesson to the first lesson in the course
+      setSelectedLessonUrl(sortedLessons[0].videoUrl);
+      //set sorted lessons in state
+      setSortedLessons(sortedLessons);
     }
 
     //call function to get course
     fetchCourse();
+    console.log("running");
 
     setIsLoading(false);
-  }, [isEmpty]);
+  }, []);
 
-  if (isLoading) {
+  const videoOptions = {
+    controls: [
+      "play",
+      "progress",
+      "current-time",
+      "mute",
+      "volume",
+      "settings", // Needed for playback speed
+      "fullscreen",
+    ],
+    settings: ["speed"], // Enable playback speed setting
+    speed: { selected: 1, options: [0.5, 1, 1.5, 2] }, // Speed options
+  };
+
+
+  if (isLoading || isEmpty) {
     return <Spinner />;
   }
 
@@ -56,21 +78,13 @@ function EnrolledCourse() {
       ) : (
         <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
           <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            <div
-              onContextMenu={(e) => e.preventDefault()}
-              style={{ position: "relative" }}
-            >
-              <ReactPlayer
-                url={
-                  selectedLesson.videoUrl === undefined
-                    ? sortedLessons[0].videoUrl
-                    : selectedLesson.videoUrl
-                }
-                playing={true}
-                controls={true}
-                width="100%"
-                height="400px"
-                className="rounded-t-lg"
+            <div className="plyr">
+              <Plyr
+                source={{
+                  type: "video",
+                  sources: [{ src: selectedLessonUrl }],
+                }}
+                options={ videoOptions }
               />
             </div>
             <div className="p-6 sm:p-8">
@@ -112,7 +126,7 @@ function EnrolledCourse() {
                       key={lesson.id}
                       className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600"
                       onClick={() => {
-                        setSelectedLesson(lesson);
+                        setSelectedLessonUrl(lesson.videoUrl);
                       }}
                     >
                       <div className="flex-1">
