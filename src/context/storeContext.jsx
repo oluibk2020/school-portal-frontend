@@ -139,7 +139,7 @@ export const StoreProvider = ({ children }) => {
 
       if (response.status === 200) {
         setCourse(data.data);
-        return;
+        return data.data;
       }
     } catch (error) {
       console.log(error);

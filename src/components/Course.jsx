@@ -3,10 +3,12 @@ import { useContext, useEffect, useState } from "react";
 import { storeContext } from "../context/storeContext";
 import Spinner from "../layout/Spinner";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 function Course() {
-  const { course, isLoading, getOneCourse, setIsLoading , setIsOpen} =
+  const { course, isLoading, getOneCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
+  const [sortedLessons, setSortedLessons] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
   const pageId = params.id;
@@ -22,11 +24,17 @@ function Course() {
     //set app to loading to get book data
     setIsLoading(true);
 
-    setIsOpen(false)
+    //close navbar
+    setIsOpen(false);
 
-    //function to get book
+    //function to fetch course
     async function fetchCourse() {
       const data = await getOneCourse(pageId);
+
+      //sort lessons
+      const sortedLessons = _.orderBy(data.lessons, ["id"], ["asc"]);
+      setSortedLessons(sortedLessons);
+
       setIsLoading(false);
     }
 
@@ -55,13 +63,12 @@ function Course() {
         toast.success("You have enrolled for this course successfully");
         //navigate to enrolled course
         navigate("/enrolledcourses");
-    } else if(response.status === 400) {
+      } else if (response.status === 400) {
         toast.error(data.msg);
         navigate("/enrolledcourses");
-    } else if (response.status === 401){
+      } else if (response.status === 401) {
         toast.error(data.msg);
         navigate("/wallet");
-
       }
 
       setIsLoading(false);
@@ -100,7 +107,10 @@ function Course() {
               <h1 className="text-3xl font-bold">{course.title}</h1>
               <p className="mt-4 text-lg">{course.description}</p>
               <p className="mt-4 font-bold text-lg">
-                Price: {course.price == "0" ? "Free" : `₦${Number(course.price).toLocaleString()} NGN`}
+                Price:{" "}
+                {course.price == "0"
+                  ? "Free"
+                  : `₦${Number(course.price).toLocaleString()} NGN`}
               </p>
               <button
                 type="button"
@@ -115,7 +125,7 @@ function Course() {
             <div className="px-6 py-4 border-t">
               <h2 className="text-2xl font-bold">Lessons</h2>
               <ul className="mt-4">
-                {course.lessons.map((lesson) => (
+                {sortedLessons.map((lesson) => (
                   <li key={lesson.id} className="flex items-center py-2">
                     <img
                       src={lesson.imageUrl}

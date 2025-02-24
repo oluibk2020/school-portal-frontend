@@ -5,15 +5,12 @@ import Spinner from "../layout/Spinner";
 import ReactPlayer from "react-player";
 import Courses from "./Courses";
 import { FaRegCirclePlay } from "react-icons/fa6";
-import { set } from "lodash";
-import { video } from "motion/react-client";
 import _ from "lodash";
-import { Helmet } from "react-helmet-async";
 
 function EnrolledCourse() {
   const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
-  const [selectedLesson, setSelectedLesson] = useState({ videoUrl: null });
+  const [selectedLesson, setSelectedLesson] = useState({ videoUrl: undefined });
   const [sortedLessons, setSortedLessons] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
@@ -31,12 +28,13 @@ function EnrolledCourse() {
     //function to get book
     async function fetchCourse() {
       const data = await getOneEnrolledCourse(pageId);
+          const sortedLessons = _.orderBy(data.lessons, ["id"], ["asc"]);
+          setSortedLessons(sortedLessons);
     }
 
     //call function to get course
     fetchCourse();
-    const sortedLessons = _.orderBy(course.lessons, ["id"], ["asc"]);
-    setSortedLessons(sortedLessons);
+
     setIsLoading(false);
   }, [isEmpty]);
 
@@ -58,26 +56,18 @@ function EnrolledCourse() {
       ) : (
         <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
           <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            <div className="relative">
+            <div
+              onContextMenu={(e) => e.preventDefault()}
+              style={{ position: "relative" }}
+            >
               <ReactPlayer
                 url={
-                  selectedLesson.videoUrl === null
-                    ? course.lessons[0].videoUrl
+                  selectedLesson.videoUrl === undefined
+                    ? sortedLessons[0].videoUrl
                     : selectedLesson.videoUrl
                 }
                 playing={true}
                 controls={true}
-                config={{
-                  youtube: {
-                    playerVars: {
-                      modestbranding: 1, // Removes YouTube logo
-                      rel: 0, // Prevents showing related videos
-                      showinfo: 0, // Hides video title and uploader info
-                      controls: 1, // Hides player controls
-                      disablekb: 1, // Disables keyboard controls
-                    },
-                  },
-                }}
                 width="100%"
                 height="400px"
                 className="rounded-t-lg"

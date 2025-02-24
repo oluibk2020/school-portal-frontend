@@ -33,7 +33,7 @@ function EnrolledCourses() {
     fetchCourse();
   }, []);
 
-  if (isLoading || enrolledCourses.length === 0) {
+  if (isLoading) {
     return <Spinner />;
   }
 
@@ -59,8 +59,9 @@ function EnrolledCourses() {
       </Helmet>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold mb-8">Your Enrolled Courses</h1>
+        {enrolledCourses.length === 0 ? <div className=" text-white text-bg">No enrolled course found!!! You are yet to enroll for a course. Empower yourself as you explore our wide range of courses.</div> : null}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {enrolledCourses.map((course) => (
+          {enrolledCourses.length === 0 ? null : enrolledCourses.map((course) => (
             <div
               key={course.course.id}
               className="bg-white shadow-lg rounded-lg overflow-hidden"
