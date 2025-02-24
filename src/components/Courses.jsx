@@ -53,6 +53,7 @@ function Courses() {
                 src={course.imageUrl}
                 alt={course.title}
                 className="w-full h-48 object-cover"
+                loading="lazy"
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold">{course.title}</h2>

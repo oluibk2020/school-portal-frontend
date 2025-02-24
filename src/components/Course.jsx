@@ -131,6 +131,7 @@ function Course() {
                       src={lesson.imageUrl}
                       alt={lesson.title}
                       className="w-20 h-20 mr-4"
+                      loading="lazy"
                     />
                     <div>
                       <h3 className="text-lg font-bold">{lesson.title}</h3>

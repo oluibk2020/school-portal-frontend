@@ -40,7 +40,6 @@ function EnrolledCourse() {
 
     //call function to get course
     fetchCourse();
-    console.log("running");
 
     setIsLoading(false);
   }, []);

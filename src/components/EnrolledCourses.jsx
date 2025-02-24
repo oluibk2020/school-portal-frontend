@@ -69,6 +69,7 @@ function EnrolledCourses() {
               <img
                 src={course.course.imageUrl}
                 alt={course.course.title}
+                loading="lazy"
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">

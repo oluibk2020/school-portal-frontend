@@ -66,6 +66,7 @@ function Dashboard() {
                 alt="Popup"
                 className="w-96 h-auto rounded cursor-pointer transition-transform hover:scale-105"
                 onClick={handleImageClick}
+                loading="lazy"
               />
               <button
                 className="absolute top-2 right-2 text-gray-600 hover:text-red-600 text-2xl font-bold"
