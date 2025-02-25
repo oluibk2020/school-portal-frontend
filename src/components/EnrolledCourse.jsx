@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState} from "react";
 import { storeContext } from "../context/storeContext";
 import Spinner from "../layout/Spinner";
-import ReactPlayer from "react-player";
 import Courses from "./Courses";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import _ from "lodash";
@@ -58,6 +57,14 @@ function EnrolledCourse() {
     speed: { selected: 1, options: [0.5, 1, 1.5, 2] }, // Speed options
   };
 
+  //handle scroll
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
 
   if (isLoading || isEmpty) {
     return <Spinner />;
@@ -75,7 +82,10 @@ function EnrolledCourse() {
           </div>
         </div>
       ) : (
-        <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+        <div
+          className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8"
+          id="videoPlayer"
+        >
           <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <div className="plyr">
               <Plyr
@@ -83,7 +93,7 @@ function EnrolledCourse() {
                   type: "video",
                   sources: [{ src: selectedLessonUrl }],
                 }}
-                options={ videoOptions }
+                options={videoOptions}
               />
             </div>
             <div className="p-6 sm:p-8">
@@ -125,7 +135,10 @@ function EnrolledCourse() {
                       key={lesson.id}
                       className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600"
                       onClick={() => {
+                        //set selected lesson
                         setSelectedLessonUrl(lesson.videoUrl);
+                        //scroll to video player
+                        handleScroll("videoPlayer");
                       }}
                     >
                       <div className="flex-1">
