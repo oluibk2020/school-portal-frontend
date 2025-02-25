@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { storeContext } from "../context/storeContext";
 import Spinner from "../layout/Spinner";
 import Courses from "./Courses";
@@ -13,7 +13,8 @@ function EnrolledCourse() {
     useContext(storeContext);
   const [selectedLessonUrl, setSelectedLessonUrl] = useState("");
   const [selectedLessonTitle, setSelectedLessonTitle] = useState("");
-  const [selectedLessonDescription, setSelectedLessonDescription] = useState("");
+  const [selectedLessonDescription, setSelectedLessonDescription] =
+    useState("");
   const [sortedLessons, setSortedLessons] = useState([]);
   const navigate = useNavigate();
   const params = useParams();
@@ -74,7 +75,6 @@ function EnrolledCourse() {
     }
   };
 
-
   if (isLoading || isEmpty) {
     return <Spinner />;
   }
@@ -118,12 +118,16 @@ function EnrolledCourse() {
                 </p>
               </div>
               <a
+                target="_blank"
+                download
                 href={course.codeUrl}
                 className="mt-4 inline-block bg-red-500 text-white py-2 px-4 rounded hover:bg-blue-600"
               >
                 Download Course Codes
               </a>
-              <a
+              <a 
+              target="_blank"
+                download
                 href={course.pdfUrl}
                 className="mt-4 mx-4 inline-block bg-black text-white py-2 px-4 rounded hover:bg-blue-600"
               >
