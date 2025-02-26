@@ -3,19 +3,26 @@ import { storeContext } from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import { Helmet } from "react-helmet-async";
+import _ from "lodash";
 
 function Courses() {
   const navigate = useNavigate();
    const { courses,isLoading, setIsOpen } =
      useContext(storeContext);
+
+     const [sortedCourses, setSortedCourses] = useState([]);
      
       const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
       useEffect(() => {
         setIsOpen(false);
+
+        //sort lessons
+              const lodashSortedCourses = _.orderBy(courses, ["id"], ["asc"]);
+              setSortedCourses(lodashSortedCourses);
       }, []);
 
-  if (isLoading || courses.length === 0) {
+  if (isLoading || sortedCourses.length === 0) {
     return <Spinner />;
   }  
 
@@ -44,7 +51,7 @@ function Courses() {
         <h1 className="text-3xl font-bold mb-8">Courses</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {courses.map((course) => (
+          {sortedCourses.map((course) => (
             <div
               key={course.id}
               className="bg-white shadow-lg rounded-lg overflow-hidden"

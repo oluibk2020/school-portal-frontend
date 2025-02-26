@@ -23,13 +23,13 @@ function EnrolledCourse() {
   //check if sorted course is empty
   const isEmpty = Object.keys(sortedLessons).length === 0;
 
+
+  //fetch course on app load
   useEffect(() => {
     setIsOpen(false);
 
-    //set app to loading to get book data
-
     setIsLoading(true);
-    //function to get book
+    //function to get course
     async function fetchCourse() {
       const data = await getOneEnrolledCourse(pageId);
       const sortedLessons = _.orderBy(data.lessons, ["id"], ["asc"]);
@@ -53,6 +53,7 @@ function EnrolledCourse() {
     setIsLoading(false);
   }, []);
 
+  //plyr video options
   const videoOptions = {
     controls: [
       "play",
@@ -100,7 +101,7 @@ function EnrolledCourse() {
               <Plyr
                 source={{
                   type: "video",
-                  sources: [{ src: selectedLessonUrl }],
+                  sources: [{ src: selectedLessonUrl}],
                 }}
                 options={videoOptions}
               />
@@ -125,8 +126,8 @@ function EnrolledCourse() {
               >
                 Download Course Codes
               </a>
-              <a 
-              target="_blank"
+              <a
+                target="_blank"
                 download
                 href={course.pdfUrl}
                 className="mt-4 mx-4 inline-block bg-black text-white py-2 px-4 rounded hover:bg-blue-600"
