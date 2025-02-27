@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 
 function Dashboard() {
-  const { userProfile, isLoading, setIsLoading, setIsOpen } =
+  const { userProfile, isLoading, setIsLoading, setIsOpen} =
     useContext(storeContext);
   const navigate = useNavigate();
     const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
