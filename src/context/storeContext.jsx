@@ -259,6 +259,32 @@ export const StoreProvider = ({ children }) => {
       );
     }
   }
+  async function logOut() {
+    try {
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (response.status === 200) {
+        return invalidateLogin(data.message);
+      }
+
+      if (response.status === 401 || response.status === 407) {
+        invalidateLogin(data.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        "Network error: We are unable to get your profile at the moment. Reload page"
+      );
+    }
+  }
 
   async function fetchTransactions(currency) {
     try {
@@ -375,6 +401,7 @@ export const StoreProvider = ({ children }) => {
     services,
     isOpen,
     setIsOpen,
+    logOut
   };
 
   return (

@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet-async";
 
 function Signout() {
   const navigate = useNavigate();
-  const { setIsAuth, setIsOpen } = useContext(storeContext);
+  const { setIsAuth, setIsOpen, logOut } = useContext(storeContext);
   
       const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
@@ -15,10 +15,7 @@ function Signout() {
     },[])
 
   function signOutHandler() {
-    localStorage.removeItem("token");
-    toast.success("Signed out successfully");
-    setIsAuth(false);
-    navigate("/login");
+    logOut()
   }
 
   return (
