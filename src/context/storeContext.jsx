@@ -28,7 +28,7 @@ export const StoreProvider = ({ children }) => {
 
   const { isExpired } = useJwt(token);
 
-async  function loginChecker() {
+  async function loginChecker() {
     try {
       if (token === null) {
         setIsAuth(false);
@@ -43,19 +43,18 @@ async  function loginChecker() {
 
       if (!isExpired) {
         //get all courses when user is authenticated
-      const response = await getAllCourses();
-        
-      if (response) {
-        
-        //get all services when user is authenticated
-        getAllServices();
-        
-        //get user profile
-        fetchProfile();
-        setIsAuth(true);
-      } else{
-        setIsAuth(false);
-      }
+        const response = await getAllCourses();
+
+        if (response) {
+          //get all services when user is authenticated
+          getAllServices();
+
+          //get user profile
+          fetchProfile();
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -94,7 +93,7 @@ async  function loginChecker() {
       }
 
       if (response.status === 401 || response.status === 407) {
-        invalidateLogin(data.message)
+        invalidateLogin(data.message);
         return false;
       }
     } catch (error) {
@@ -145,7 +144,7 @@ async  function loginChecker() {
       }
 
       if (response.status === 401 || response.status === 407) {
-       invalidateLogin(data.message);
+        invalidateLogin(data.message);
         return;
       }
     } catch (error) {
@@ -223,7 +222,7 @@ async  function loginChecker() {
       setWalletBalance(data.wallet.balance);
 
       if (response.status === 401 || response.status === 407) {
-       invalidateLogin(data.message);
+        invalidateLogin(data.message);
         return;
       }
     } catch (error) {
@@ -244,7 +243,7 @@ async  function loginChecker() {
         },
       });
       const data = await response.json();
-      
+
       if (response.status === 200) {
         return setUserProfile(data.data);
       }
@@ -274,7 +273,6 @@ async  function loginChecker() {
       const data = await response.json();
 
       if (response.status === 200) {
-        
         setTransactions(data.data);
       }
 
@@ -303,17 +301,14 @@ async  function loginChecker() {
 
       const data = await response.json();
 
-       if (response.status === 401 || response.status === 407) {
+      if (response.status === 401 || response.status === 407) {
         invalidateLogin(data.message);
         return;
       }
 
       if (response.status === 200) {
-        
         setTransaction(data.transaction);
       }
-
-
     } catch (error) {
       toast.error(
         "Network error: We are unable to get this transaction at the moment. Reload page"
@@ -338,14 +333,13 @@ async  function loginChecker() {
 
       if (response.status === 200) {
         setPaymentLink(data.response.data.link);
-        return
+        return;
       }
 
-       if (response.status === 401 || response.status === 407) {
-         invalidateLogin(data.message);
-         return;
-       }
-
+      if (response.status === 401 || response.status === 407) {
+        invalidateLogin(data.message);
+        return;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -380,7 +374,7 @@ async  function loginChecker() {
     createPaymentInvoice,
     services,
     isOpen,
-    setIsOpen
+    setIsOpen,
   };
 
   return (
