@@ -12,6 +12,7 @@ function EnrolledCourse() {
   const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
   const [selectedLessonUrl, setSelectedLessonUrl] = useState("");
+  const [selectedLessonId, setSelectedLessonId] = useState(1);
   const [selectedLessonTitle, setSelectedLessonTitle] = useState("");
   const [selectedLessonDescription, setSelectedLessonDescription] =
     useState("");
@@ -101,7 +102,7 @@ function EnrolledCourse() {
               <Plyr
                 source={{
                   type: "video",
-                  sources: [{ src: selectedLessonUrl}],
+                  sources: [{ src: selectedLessonUrl }],
                 }}
                 options={videoOptions}
               />
@@ -155,7 +156,11 @@ function EnrolledCourse() {
                 : sortedLessons.map((lesson) => (
                     <li
                       key={lesson.id}
-                      className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600"
+                      className={
+                        lesson.id === selectedLessonId
+                          ? `flex items-center bg-blue-600 dark:bg-blue-600 rounded-lg shadow-md p-4 cursor-pointer hover:bg-gray-500 dark:hover:bg-gray-600 `
+                          : `flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600`
+                      }
                       onClick={() => {
                         //set selected lesson
                         setSelectedLessonUrl(lesson.videoUrl);
@@ -165,13 +170,27 @@ function EnrolledCourse() {
                         setSelectedLessonTitle(lesson.title);
                         //scroll to video player
                         handleScroll("videoPlayer");
+                        //set selected lesson id
+                        setSelectedLessonId(lesson.id);
                       }}
                     >
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                        <h3
+                          className={
+                            lesson.id === selectedLessonId
+                              ? "text-lg font-bold text-white dark:text-white"
+                              : "text-lg font-bold text-gray-900 dark:text-white"
+                          }
+                        >
                           {lesson.title}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                        <p
+                          className={
+                            lesson.id === selectedLessonId
+                              ? "text-sm text-gray-200 dark:text-gray-200"
+                              : "text-sm text-gray-600 dark:text-gray-300"
+                          }
+                        >
                           {lesson.description.length > 70 ? (
                             <>
                               {lesson.description.slice(0, 70)}
@@ -183,7 +202,13 @@ function EnrolledCourse() {
                         </p>
                       </div>
                       <div className="flex-shrink-0 ml-4">
-                        <FaRegCirclePlay className="text-xl text-gray-600 dark:text-gray-300" />
+                        <FaRegCirclePlay
+                          className={
+                            lesson.id === selectedLessonId
+                              ? "text-xl text-white dark:text-white"
+                              : "text-xl text-gray-600 dark:text-gray-300"
+                          }
+                        />
                       </div>
                     </li>
                   ))}
