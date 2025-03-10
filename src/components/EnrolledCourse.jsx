@@ -11,6 +11,7 @@ import "plyr-react/plyr.css";
 function EnrolledCourse() {
   const { course, isLoading, getOneEnrolledCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
+  const [searchQuery, setSearchQuery] = useState(""); // Add search state
   const [selectedLessonUrl, setSelectedLessonUrl] = useState("");
   const [selectedLessonId, setSelectedLessonId] = useState(1);
   const [selectedLessonTitle, setSelectedLessonTitle] = useState("");
@@ -23,7 +24,6 @@ function EnrolledCourse() {
 
   //check if sorted course is empty
   const isEmpty = Object.keys(sortedLessons).length === 0;
-
 
   //fetch course on app load
   useEffect(() => {
@@ -76,6 +76,24 @@ function EnrolledCourse() {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const clearSearchQuery = () => {
+    setSearchQuery(""); // Clear the search query
+  };
+
+  // Filter lessons based on search query
+  const filteredLessons = sortedLessons.filter(
+    (lesson) =>
+      lesson.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lesson.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Use sortedLessons if search is empty, else use filteredLessons
+  const lessonsToDisplay = searchQuery.trim() ? filteredLessons : sortedLessons;
 
   if (isLoading || isEmpty) {
     return <Spinner />;
@@ -146,72 +164,97 @@ function EnrolledCourse() {
           </div>
 
           <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+            {/* Search Input */}
+            <div className="px-6 py-4">
+              <input
+                type="text"
+                placeholder="Search lessons..."
+                value={searchQuery}
+                onChange={handleSearch}
+                className="w-full px-4 text-white py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {/* hide clear button if search query is empty */}
+              {searchQuery.trim().length === 0 ? (
+                ""
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => clearSearchQuery()}
+                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            {/* Lessons */}
             <h2 className="text-2xl font-bold text-center py-4 text-gray-900 dark:text-white">
               Lessons
             </h2>
 
             <ul className="space-y-4 px-4 sm:px-6 lg:px-8 py-4">
-              {Object.keys(sortedLessons).length === 0
-                ? "No lessons found"
-                : sortedLessons.map((lesson) => (
-                    <li
-                      key={lesson.id}
-                      className={
-                        lesson.id === selectedLessonId
-                          ? `flex items-center bg-blue-600 dark:bg-blue-600 rounded-lg shadow-md p-4 cursor-pointer hover:bg-gray-500 dark:hover:bg-gray-600 `
-                          : `flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600`
-                      }
-                      onClick={() => {
-                        //set selected lesson
-                        setSelectedLessonUrl(lesson.videoUrl);
-                        //set selectedLesson Description
-                        setSelectedLessonDescription(lesson.description);
-                        //set selectedLesson Title
-                        setSelectedLessonTitle(lesson.title);
-                        //scroll to video player
-                        handleScroll("videoPlayer");
-                        //set selected lesson id
-                        setSelectedLessonId(lesson.id);
-                      }}
-                    >
-                      <div className="flex-1">
-                        <h3
-                          className={
-                            lesson.id === selectedLessonId
-                              ? "text-lg font-bold text-white dark:text-white"
-                              : "text-lg font-bold text-gray-900 dark:text-white"
-                          }
-                        >
-                          {lesson.title}
-                        </h3>
-                        <p
-                          className={
-                            lesson.id === selectedLessonId
-                              ? "text-sm text-gray-200 dark:text-gray-200"
-                              : "text-sm text-gray-600 dark:text-gray-300"
-                          }
-                        >
-                          {lesson.description.length > 70 ? (
-                            <>
-                              {lesson.description.slice(0, 70)}
-                              <span>... </span>
-                            </>
-                          ) : (
-                            course.description
-                          )}
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0 ml-4">
-                        <FaRegCirclePlay
-                          className={
-                            lesson.id === selectedLessonId
-                              ? "text-xl text-white dark:text-white"
-                              : "text-xl text-gray-600 dark:text-gray-300"
-                          }
-                        />
-                      </div>
-                    </li>
-                  ))}
+              {lessonsToDisplay.length === 0 ? (
+                <p className="text-red-500">No lessons found</p>
+              ) : (
+                lessonsToDisplay.map((lesson) => (
+                  <li
+                    key={lesson.id}
+                    className={
+                      lesson.id === selectedLessonId
+                        ? `flex items-center bg-blue-600 dark:bg-blue-600 rounded-lg shadow-md p-4 cursor-pointer hover:bg-gray-500 dark:hover:bg-gray-600 `
+                        : `flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-600`
+                    }
+                    onClick={() => {
+                      //set selected lesson
+                      setSelectedLessonUrl(lesson.videoUrl);
+                      //set selectedLesson Description
+                      setSelectedLessonDescription(lesson.description);
+                      //set selectedLesson Title
+                      setSelectedLessonTitle(lesson.title);
+                      //scroll to video player
+                      handleScroll("videoPlayer");
+                      //set selected lesson id
+                      setSelectedLessonId(lesson.id);
+                    }}
+                  >
+                    <div className="flex-1">
+                      <h3
+                        className={
+                          lesson.id === selectedLessonId
+                            ? "text-lg font-bold text-white dark:text-white"
+                            : "text-lg font-bold text-gray-900 dark:text-white"
+                        }
+                      >
+                        {lesson.title}
+                      </h3>
+                      <p
+                        className={
+                          lesson.id === selectedLessonId
+                            ? "text-sm text-gray-200 dark:text-gray-200"
+                            : "text-sm text-gray-600 dark:text-gray-300"
+                        }
+                      >
+                        {lesson.description.length > 70 ? (
+                          <>
+                            {lesson.description.slice(0, 70)}
+                            <span>... </span>
+                          </>
+                        ) : (
+                          course.description
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0 ml-4">
+                      <FaRegCirclePlay
+                        className={
+                          lesson.id === selectedLessonId
+                            ? "text-xl text-white dark:text-white"
+                            : "text-xl text-gray-600 dark:text-gray-300"
+                        }
+                      />
+                    </div>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
         </div>

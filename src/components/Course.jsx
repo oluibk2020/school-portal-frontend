@@ -9,6 +9,7 @@ function Course() {
   const { course, isLoading, getOneCourse, setIsLoading, setIsOpen } =
     useContext(storeContext);
   const [sortedLessons, setSortedLessons] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Add search state
   const navigate = useNavigate();
   const params = useParams();
   const pageId = params.id;
@@ -78,6 +79,21 @@ function Course() {
     }
   }
 
+  // Function to handle search input
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Filter lessons based on search query
+  const filteredLessons = sortedLessons.filter(
+    (lesson) =>
+      lesson.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lesson.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Use sortedLessons if search is empty, else use filteredLessons
+  const lessonsToDisplay = searchQuery.trim() ? filteredLessons : sortedLessons;
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -122,9 +138,40 @@ function Course() {
                 Enroll Now
               </button>
             </div>
+            {/* Search Input */}
+            <div className="px-6 py-4">
+              <input
+                type="text"
+                placeholder="Search lessons..."
+                value={searchQuery}
+                onChange={handleSearch}
+                className="w-full px-4 text-white py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            {/* Lessons */}
             <div className="px-6 py-4 border-t">
               <h2 className="text-2xl font-bold">Lessons</h2>
-              <ul className="mt-4">
+              {lessonsToDisplay.length === 0 ? (
+                <p className="text-red-500">No lessons found</p>
+              ) : (
+                <ul className="mt-4">
+                  {lessonsToDisplay.map((lesson) => (
+                    <li key={lesson.id} className="flex items-center py-2">
+                      <img
+                        src={lesson.imageUrl}
+                        alt={lesson.title}
+                        className="w-20 h-20 mr-4"
+                        loading="lazy"
+                      />
+                      <div>
+                        <h3 className="text-lg font-bold">{lesson.title}</h3>
+                        <p className="text-sm">{lesson.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {/* <ul className="mt-4">
                 {sortedLessons.map((lesson) => (
                   <li key={lesson.id} className="flex items-center py-2">
                     <img
@@ -139,7 +186,7 @@ function Course() {
                     </div>
                   </li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>
