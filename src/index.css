@@ -33,24 +33,60 @@
   }
 }
 
-.active{
+.active {
   color: white;
   --tw-bg-opacity: 1;
-    background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1)) /* #1d4ed8 */;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1)) /* #1d4ed8 */;
 }
 
-.videoplayerCard{
-flex-basis: 70%;
+.videoplayerCard {
+  flex-basis: 70%;
 }
 
-.lessonList{
+.lessonList {
   flex-basis: 30%;
 }
 
-
 .plyr {
   width: 100% !important;
-  height: 400px !important;
+  height: 80vh !important;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+@media (min-width: 320px) {
+  /* Applies on large screens (desktop) */
+
+  .plyr {
+  width: 100% !important;
+  height: fit-content !important;
+}
+}
+
+@media (min-width: 1024px) {
+  /* Applies on large screens (desktop) */
+
+.lessonSectionDesktop {
+    width: 30%;
+    margin-left: 75%;
+    margin-right: -24px;
+    border: 3px solid #0094EA;
+}
+
+  .videoplayerCardDesktop {
+    position: fixed;
+    top: 66px;
+    left: 10px;
+    width: 70%;
+    height: 85vh;
+    overflow-y: scroll;
+  }
+
+  .plyr {
+  width: 100% !important;
+  height: 78vh !important;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  /* margin: 0 auto; */
+}
 }

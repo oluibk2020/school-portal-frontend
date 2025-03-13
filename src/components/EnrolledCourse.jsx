@@ -21,6 +21,41 @@ function EnrolledCourse() {
   const navigate = useNavigate();
   const params = useParams();
   const pageId = params.id;
+  const [isFixed, setIsFixed] = useState(true); // Default: Fixed position
+
+  //to control fixed position for display of player and lesson on desktop
+  useEffect(() => {
+
+    const checkAndObserve = () => {
+      const coursesSection = document.getElementById("coursesSection");
+      const videoSection = document.getElementById("videoPlayerSection");
+
+      if (!coursesSection || !videoSection) {
+        console.warn("Courses section not found. Retrying...");
+        setTimeout(checkAndObserve, 500); // Retry after 500ms
+        return;
+      }
+
+      console.log("Courses section found. Setting up observer...");
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsFixed(!entry.isIntersecting);
+        },
+        {
+          root: null,
+          rootMargin: "100px 0px -100px 0px", // Adjust to trigger state change earlier
+          threshold: 0, // Change state as soon as the section appears
+        }
+      );
+
+      observer.observe(coursesSection);
+
+      return () => observer.disconnect();
+    };
+
+    checkAndObserve(); // Run the function on mount
+  }, []);
 
   //check if sorted course is empty
   const isEmpty = Object.keys(sortedLessons).length === 0;
@@ -115,7 +150,14 @@ function EnrolledCourse() {
           className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8"
           id="videoPlayer"
         >
-          <div className="videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div
+            className={
+              isFixed
+                ? "videoplayerCardDesktop transition-all duration-300 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+                : "videoplayerCard bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+            }
+            id="videoPlayerSection"
+          >
             <div className="plyr">
               <Plyr
                 source={{
@@ -125,8 +167,64 @@ function EnrolledCourse() {
                 options={videoOptions}
               />
             </div>
+
+            <div className="flex justify-between mt-4 mx-4">
+              <button
+                className={`bg-gray-500 text-white py-2 px-4 rounded ${
+                  selectedLessonId === sortedLessons[0]?.id
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-700"
+                }`}
+                onClick={() => {
+                  const currentIndex = sortedLessons.findIndex(
+                    (lesson) => lesson.id === selectedLessonId
+                  );
+                  if (currentIndex > 0) {
+                    const prevLesson = sortedLessons[currentIndex - 1];
+                    setSelectedLessonId(prevLesson.id);
+                    setSelectedLessonUrl(prevLesson.videoUrl);
+                    setSelectedLessonTitle(prevLesson.title);
+                    setSelectedLessonDescription(prevLesson.description);
+                    handleScroll("videoPlayer");
+                  }
+                }}
+                disabled={selectedLessonId === sortedLessons[0]?.id}
+              >
+                Previous
+              </button>
+
+              <button
+                className={`bg-blue-500 text-white py-2 px-4 rounded ${
+                  selectedLessonId ===
+                  sortedLessons[sortedLessons.length - 1]?.id
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-blue-700"
+                }`}
+                onClick={() => {
+                  const currentIndex = sortedLessons.findIndex(
+                    (lesson) => lesson.id === selectedLessonId
+                  );
+
+                  if (currentIndex < sortedLessons.length - 1) {
+                    const nextLesson = sortedLessons[currentIndex + 1];
+                    setSelectedLessonId(nextLesson.id);
+                    setSelectedLessonUrl(nextLesson.videoUrl);
+                    setSelectedLessonTitle(nextLesson.title);
+                    setSelectedLessonDescription(nextLesson.description);
+                    handleScroll("videoPlayer");
+                  }
+                }}
+                disabled={
+                  selectedLessonId ===
+                  sortedLessons[sortedLessons.length - 1]?.id
+                }
+              >
+                Next
+              </button>
+            </div>
+
             <div className="p-6 sm:p-8">
-              <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white">
+              <h1 className="text-3xl max-[480px]:text-2xl font-bold text-center text-gray-900 dark:text-white">
                 Course - {course.title}
               </h1>
               <div className="my-2 py-4 px-2 border border-gray-400 bg-gray-700 dark:bg-gray-700">
@@ -163,7 +261,14 @@ function EnrolledCourse() {
             </div>
           </div>
 
-          <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+          <div
+            className={
+              isFixed
+                ? "lessonSectionDesktop flex-1 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+                : "flex-1 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+            }
+            id="lessonSection"
+          >
             {/* Search Input */}
             <div className="px-6 py-4">
               <input
@@ -259,7 +364,9 @@ function EnrolledCourse() {
           </div>
         </div>
       )}
-      <Courses />
+      <div id="coursesSection">
+        <Courses />
+      </div>
     </div>
   );
 }
