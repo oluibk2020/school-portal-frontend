@@ -296,7 +296,13 @@ function EnrolledCourse() {
               Lessons
             </h2>
 
-            <ul className="space-y-4 px-4 sm:px-6 lg:px-8 py-4">
+            <ul
+              className={
+                lessonsToDisplay.length === 0
+                  ? "min-[1024px]:my-80 space-y-4 px-4 sm:px-6 lg:px-8 py-4"
+                  : "space-y-4 px-4 sm:px-6 lg:px-8 py-4"
+              }
+            >
               {lessonsToDisplay.length === 0 ? (
                 <p className="text-red-500">No lessons found</p>
               ) : (
