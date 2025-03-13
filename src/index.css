@@ -82,6 +82,33 @@
     overflow-y: scroll;
   }
 
+
+  /* Scrollbar Styling for Fixed Section */
+.videoplayerCardDesktop::-webkit-scrollbar {
+  width: 8px;
+}
+
+.videoplayerCardDesktop::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light grey background */
+  border-radius: 10px;
+}
+
+.videoplayerCardDesktop::-webkit-scrollbar-thumb {
+  background: #1d4ed8; /* Blue color */
+  border-radius: 10px;
+}
+
+.videoplayerCardDesktop::-webkit-scrollbar-thumb:hover {
+  background: #1e40af; /* Darker blue on hover */
+}
+
+/* For Firefox */
+.videoplayerCardDesktop {
+  scrollbar-color: #1d4ed8 #f1f1f1;
+  scrollbar-width: thin;
+}
+
+
   .plyr {
   width: 100% !important;
   height: 78vh !important;
