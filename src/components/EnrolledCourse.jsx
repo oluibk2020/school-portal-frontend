@@ -255,7 +255,7 @@ function EnrolledCourse() {
                 target="_blank"
                 download
                 href={course.referenceUrl}
-                className="mt-4 mx-4 inline-block bg-black text-white py-2 px-4 rounded hover:bg-blue-600"
+                className="mt-4 mx-4 inline-block bg-black text-black py-2 px-4 rounded hover:bg-yellow-600"
               >
                 Download References
               </a>
