@@ -251,6 +251,14 @@ function EnrolledCourse() {
               >
                 Download Course PDF
               </a>
+              <a
+                target="_blank"
+                download
+                href={course.referenceUrl}
+                className="mt-4 mx-4 inline-block bg-black text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Download References
+              </a>
               <button
                 type="button"
                 onClick={() => navigate(`/enrolledcourses`)}

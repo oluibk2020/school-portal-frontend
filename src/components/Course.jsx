@@ -171,22 +171,6 @@ function Course() {
                   ))}
                 </ul>
               )}
-              {/* <ul className="mt-4">
-                {sortedLessons.map((lesson) => (
-                  <li key={lesson.id} className="flex items-center py-2">
-                    <img
-                      src={lesson.imageUrl}
-                      alt={lesson.title}
-                      className="w-20 h-20 mr-4"
-                      loading="lazy"
-                    />
-                    <div>
-                      <h3 className="text-lg font-bold">{lesson.title}</h3>
-                      <p className="text-sm">{lesson.description}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul> */}
             </div>
           </div>
         </div>
