@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 
 function Course() {
-  const { course, isLoading, getOneCourse, setIsLoading, setIsOpen } =
+  const { course, isLoading, getOneCourse, setIsLoading, setIsOpen , wallet} =
     useContext(storeContext);
   const [sortedLessons, setSortedLessons] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Add search state
@@ -54,6 +54,7 @@ function Course() {
         },
         body: JSON.stringify({
           courseId: parseInt(pageId),
+          currency: wallet,
         }),
       });
 
