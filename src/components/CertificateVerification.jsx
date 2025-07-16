@@ -14,7 +14,7 @@ function CertificateVerification() {
   // Define API_URL. In a real Vite app, this would be available via import.meta.env.VITE_API_URL
   // For this example, we'll use a placeholder if VITE_API_URL is not defined in the environment.
   // In a live environment, ensure VITE_API_URL is correctly set in your .env file.
-  const API_URL = import.meta.env.VITE_API_URL 
+  const API_URL = import.meta.env.VITE_API_URL;
 
   /**
    * Fetches and verifies the certificate ID from the API.
@@ -27,13 +27,28 @@ function CertificateVerification() {
         return;
       }
 
+      let trimmedCertId;
+
+      //if certId starts with CI- or ci-, remove it
+      if (
+        certId.startsWith("CI-") ||
+        certId.startsWith("ci-") ||
+        certId.startsWith("Ci-") ||
+        certId.startsWith("cI-")
+      ) {
+        trimmedCertId = certId.slice(3);
+      } else {
+        trimmedCertId = certId;
+      }
+
+
       setLoading(true);
       setError(null);
       setCertificateData(null); // Clear previous data
 
       try {
         const response = await fetch(
-          `${API_URL}/certificate/verify/${certId}`,
+          `${API_URL}/certificate/verify/${trimmedCertId}`,
           {
             method: "GET",
             headers: {
