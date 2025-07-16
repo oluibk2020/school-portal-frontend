@@ -104,7 +104,7 @@ function Hero() {
           </div>
 
           {/* Certificate Verification Input */}
-          <div className="mt-16 bg-blue-600 p-8 rounded-xl shadow-xl max-w-2xl mx-auto">
+          <div className="mt-16 bg-blue-600 p-8 rounded-xl shadow-xl max-w-2xl mx-auto" id="verify-certificate">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">
               Verify Your Certificate
             </h2>
