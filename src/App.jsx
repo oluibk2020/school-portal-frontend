@@ -24,6 +24,7 @@ import NotFound from "./pages/NotFound";
 import Footer from "./layout/Footer";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./components/UpdateProfile";
+import CertificateVerification from "./components/CertificateVerification";
 
 function App() {
   const { isAuth } = useContext(storeContext);
@@ -36,6 +37,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={isAuth ? <Dashboard /> : <Hero />} />
         <Route path="/login" element={isAuth ? <Dashboard /> : <Login />} />
+
         <Route
           path="/resetpasswordverification"
           element={isAuth ? <Dashboard /> : <ResetVerification />}
@@ -55,8 +57,15 @@ function App() {
           path="/register"
           element={isAuth ? <Dashboard /> : <Register />}
         />
+        <Route
+          path="/register"
+          element={isAuth ? <Dashboard /> : <Register />}
+        />
         <Route path="/dashboard" element={isAuth ? <Dashboard /> : <Login />} />
-        <Route path="/updateprofile" element={isAuth ? <UpdateProfile /> : <Login />} />
+        <Route
+          path="/updateprofile"
+          element={isAuth ? <UpdateProfile /> : <Login />}
+        />
         <Route path="/profile" element={isAuth ? <Profile /> : <Login />} />
         <Route path="/courses" element={isAuth ? <Courses /> : <Login />} />
         <Route
@@ -77,6 +86,10 @@ function App() {
         <Route
           path="/enrolledcourse/:id"
           element={isAuth ? <EnrolledCourse /> : <Login />}
+        />
+        <Route
+          path="/certificate/verify"
+          element={<CertificateVerification />}
         />
       </Routes>
       <Footer />
