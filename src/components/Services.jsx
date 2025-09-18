@@ -47,12 +47,16 @@ function Services() {
 
   async function payService(serviceId) {
     try {
-      const response = await fetch(`${API_URL}/services/pay/${serviceId}`, {
-        method: "GET", //PUT
+      const response = await fetch(`${API_URL}/services/pay/${serviceId}/${wallet}`, {
+        method: "POST", //POST request
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, //your token
         },
+        body: JSON.stringify({
+          serviceId: Number(serviceId),
+          wallet
+        }), //no body needed
       });
 
       const data = await response.json();
