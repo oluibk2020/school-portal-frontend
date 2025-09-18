@@ -47,7 +47,7 @@ function Services() {
 
   async function payService(serviceId) {
     try {
-      const response = await fetch(`${API_URL}/services/pay/${serviceId}/${wallet}`, {
+      const response = await fetch(`${API_URL}/services/pay`, {
         method: "POST", //POST request
         headers: {
           "Content-Type": "application/json",
